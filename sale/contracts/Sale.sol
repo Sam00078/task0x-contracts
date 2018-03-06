@@ -10,10 +10,13 @@ contract Sale is Ownable {
     uint mincap = 0;
     address tokenAddr;
     bool isActive = false;
+    bool onlyWhitelist = false;
 
     mapping(address => uint) balance;
     mapping(address => uint) balanceWithdrawn;
     address[] investors;
+    mapping(address => bool) whitelist;
+
 
     function Sale() public{
     }
@@ -23,6 +26,7 @@ contract Sale is Ownable {
       require(tokenAddr != address(0));
       require(msg.sender != address(0));
       require(msg.value >=  mincap );
+      require(!onlyWhitelist || whitelist[msg.sender]);
       uint256 amt = msg.value.mul(rate);
 
       ERC20 token = ERC20(tokenAddr);
@@ -52,12 +56,20 @@ contract Sale is Ownable {
     function changeAddr(address _tokenAddr) public onlyOwner{
       tokenAddr = _tokenAddr;
     }
-    function drainWei() public onlyOwner{
-        owner.transfer(this.balance);
+    function addWhitelist(address[] addr_list) public onlyOwner{
+      for(uint i=0;i<addr_list.length;i++){
+        whitelist[addr_list[i]] = true;
+      }
     }
     function setActive() public onlyOwner{
         isActive = !isActive;
     }
+    function setActiveWhitelist() public onlyOwner{
+        onlyWhitelist = !onlyWhitelist;
+    }
+    function drainWei() public onlyOwner{
+        owner.transfer(this.balance);
+    }    
     function drainToken() public onlyOwner{
         uint cantWithdrawAmt = 0;
         for(uint i = 0;i<investors.length;i++){
