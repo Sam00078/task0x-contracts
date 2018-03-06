@@ -29,7 +29,9 @@ contract('Sale', accounts => {
     	await toko.transfer.sendTransaction(instance.address, 100000e18);
     	await instance.changeAddr.sendTransaction(toko.address);
       await instance.changeRate.sendTransaction(rate);
-    	await instance.setActive.sendTransaction();
+      await instance.setActive.sendTransaction();
+      await instance.setActiveWhitelist.sendTransaction();
+    	await instance.addWhitelist.sendTransaction([accounts[1]]);
     });
     it('Buy Tokens', async () => {    	
     	assert(await toko.balanceOf.call(accounts[1]) == 0 );
