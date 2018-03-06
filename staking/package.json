@@ -1,0 +1,19 @@
+{
+  "name": "staking",
+  "version": "1.0.0",
+  "description": "",
+  "license": "GPL-3.0",
+  "scripts": {
+    "test": "truffle test"
+  },
+  "files": [
+    "contracts/",
+    "truffle.js"
+  ],
+  "devDependencies": {
+    "truffle": "^4.0.0"
+  },
+  "dependencies": {
+    "zeppelin-solidity": "^1.7.0"
+  }
+}
